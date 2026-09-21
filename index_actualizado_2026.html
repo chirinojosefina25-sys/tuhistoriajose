@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Fútbol: Tu Historia 2026</title>
+<style>
+:root{--bg:#07111f;--card:#101d30;--card2:#14243b;--accent:#28d17c;--accent2:#56a8ff;--text:#f5f7fb;--muted:#9fb0c7;--danger:#ff667d}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(160deg,#06101d,#0b1830 55%,#07111f);color:var(--text);font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+button,input,select{font:inherit} .app{max-width:720px;margin:auto;padding:18px 14px 35px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.logo{font-weight:900;letter-spacing:.5px}.save{font-size:12px;color:var(--muted)}
+.progress{height:6px;background:#20314a;border-radius:99px;overflow:hidden;margin-bottom:22px}.bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:.25s}
+.screen{display:none;animation:in .22s ease}.screen.active{display:block}@keyframes in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero{padding:30px 6px 22px}.badge{display:inline-block;background:#183552;color:#8fd0ff;border:1px solid #2b5277;padding:7px 10px;border-radius:99px;font-size:12px;font-weight:700}
+h1{font-size:42px;line-height:1.02;margin:18px 0 12px}h2{font-size:28px;margin:8px 0 12px}h3{margin:0 0 8px}.lead{color:var(--muted);font-size:16px;line-height:1.5}
+.card{background:rgba(16,29,48,.92);border:1px solid #233752;border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 12px 35px rgba(0,0,0,.15)}
+label{display:block;color:#b8c7d9;font-size:13px;margin:13px 0 7px}input,select{width:100%;padding:13px 14px;border-radius:12px;border:1px solid #304766;background:#0b1728;color:white;outline:none}input:focus,select:focus{border-color:var(--accent2)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice{width:100%;text-align:left;background:var(--card);border:1px solid #29405e;color:white;padding:15px;border-radius:15px;cursor:pointer;transition:.15s}.choice:hover{transform:translateY(-1px);border-color:#4e78a5}.choice.selected{border-color:var(--accent);background:#123525}.choice small{display:block;color:var(--muted);margin-top:5px}
+.actions{display:flex;gap:10px;margin-top:18px}.btn{border:0;border-radius:13px;padding:13px 17px;font-weight:800;cursor:pointer}.primary{background:var(--accent);color:#04130b;flex:1}.secondary{background:#1a2b43;color:white}.disabled{opacity:.45;pointer-events:none}
+.story{font-size:16px;line-height:1.65;color:#dbe4ef}.scene{background:#0b1728;border-left:3px solid var(--accent2);padding:15px;border-radius:10px;margin:15px 0}.choiceList{display:grid;gap:10px}.choiceList button{text-align:left}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.stat{font-size:12px;background:#172840;border-radius:99px;padding:7px 10px;color:#b9cae0}
+.club{font-weight:800}.player{font-size:17px;font-weight:800}.footer{text-align:center;color:#71839a;font-size:12px;margin-top:28px}
+.error{color:#ff9baa;font-size:13px;margin-top:8px}.pill{color:#8ee6b6}
+@media(max-width:520px){h1{font-size:35px}.grid{grid-template-columns:1fr}.app{padding:14px 12px 30px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="logo">⚽ TU HISTORIA 2026</div><div class="save" id="saveLabel">guardado automático</div></div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+
+  <section class="screen active" id="s0">
+    <div class="hero">
+      <span class="badge">ARGENTINA · FÚTBOL PROFESIONAL</span>
+      <h1>Tu carrera.<br>Tu historia.</h1>
+      <p class="lead">Creá tu personaje, elegí un rol, un club y un futbolista real como personaje central. Después tomá decisiones que cambian el recorrido de la historia.</p><p style="color:#8fd0ff;font-size:12px;margin-top:8px">Planteles revisados con información de 2026 · 21/09/2026</p>
+      <div class="card">
+        <h3>Cómo se juega</h3>
+        <p class="story">Vas a pasar por etapas. Tus elecciones quedan guardadas y algunas situaciones posteriores dependen de lo que hayas elegido antes.</p>
+      </div>
+      <div class="actions"><button class="btn primary" onclick="go(1)">EMPEZAR</button></div>
+    </div>
+  </section>
+
+  <section class="screen" id="s1">
+    <h2>1 · Tu personaje</h2><p class="lead">Primero contame quién sos dentro de esta historia.</p>
+    <div class="card">
+      <label>Nombre</label><input id="name" placeholder="Ej. Josefina">
+      <label>Edad</label><input id="age" type="number" min="13" max="60" placeholder="Ej. 18">
+      <label>Ciudad</label><input id="city" placeholder="Ej. La Plata">
+      <label>Personalidad</label>
+      <select id="personality"><option value="">Elegí una</option><option>Extrovertida y energética</option><option>Tranquila y observadora</option><option>Competitiva y frontal</option><option>Creativa y espontánea</option><option>Ambiciosa y perseverante</option></select>
+      <div id="err1" class="error"></div>
+    </div>
+    <div class="actions"><button class="btn secondary" onclick="go(0)">ATRÁS</button><button class="btn primary" onclick="saveInfo()">CONTINUAR</button></div>
+  </section>
+
+  <section class="screen" id="s2">
+    <h2>2 · Tu rol</h2><p class="lead">Elegí qué lugar ocupás en el mundo del fútbol.</p>
+    <div class="grid" id="roles"></div>
+    <div class="actions"><button class="btn secondary" onclick="go(1)">ATRÁS</button><button class="btn primary" onclick="saveRole()">CONTINUAR</button></div>
+  </section>
+
+  <section class="screen" id="s3">
+    <h2>3 · Elegí un club</h2><p class="lead">El club determina qué futbolistas podés elegir como personaje central.</p>
+    <div class="grid" id="clubs"></div>
+    <div class="actions"><button class="btn secondary" onclick="go(2)">ATRÁS</button><button class="btn primary" onclick="saveClub()">CONTINUAR</button></div>
+  </section>
+
+  <section class="screen" id="s4">
+    <h2>4 · Elegí al futbolista</h2><p class="lead" id="clubIntro"></p>
+    <div class="grid" id="players"></div>
+    <div class="actions"><button class="btn secondary" onclick="go(3)">ATRÁS</button><button class="btn primary" onclick="savePlayer()">CONTINUAR</button></div>
+  </section>
+
+  <section class="screen" id="s5"></section>
+  <section class="screen" id="s6"></section>
+  <section class="screen" id="s7"></section>
+  <section class="screen" id="s8"></section>
+  <section class="screen" id="s9"></section>
+  <section class="screen" id="s10"></section>
+  <section class="screen" id="s11"></section>
+  <section class="screen" id="s12"></section>
+
+  <div class="footer">Ficción interactiva. Los futbolistas reales aparecen como personajes de una historia ficticia.</div>
+</div>
+
+<script>
+const clubs={
+"Estudiantes":["Fabricio Iacovich","Fernando Muslera","Rodrigo Borzone","Máximo Desábato","Santiago Núñez","Gastón Benedetti","Leandro González Pirez","Santiago Arzamendia","Eric Meza","Tomás Palacios","Ramiro Funes Mori","Faustino Messina","Valente Pierani","Joaquín Pereyra","Eros Mancuso","Tiago Palacios","José Sosa","Thiago González","Gabriel Neves","Ezequiel Piovi","Alexis Castro","Jalil Elías","Miguel Monsalve","Bautista Kociubinski","Baltasar Rodríguez","Franco Basualdo","Guido Carrillo","Adolfo Gaich","Joaquín Tobio Burgos","Edwuin Cetré","Franco Domínguez Ávila","Lucas Alario","Joaquín Correa","Brian Aguirre","Fabricio Pérez","Benjamín Sagües Barreiro"],
+"Racing":["Francisco Gómez","Thiago De Bellis","Facundo Cambeses","Matías Tagliamonte","Agustín García Basso","Marco Di Césare","Ezequiel Cannavo","Marcos Rojo","Gastón Martirena","Luis Espino","Ignacio Rodríguez","Nazareno Colombo","Tobías Rubio","Claudio Kranevitter","Alan Forneris","Matko Miljevic","Federico Zaracho","Santiago Sosa","Diego Ortegoza","Baltasar Rodríguez","Adrián Fernández","Duván Vergara","Adrián Martínez","Tomás Conechny","Valentín Carboni","Elías Torres","Gastón Lodico","Lautaro Díaz","Gonzalo Escudero"],
+"River":["Ezequiel Centurión","Santiago Beltrán","Jeremías Martinet","Tobías Ramírez","Francisco Ortega","Lautaro Rivero","Giovanni González","Marcos Acuña","Lucas Martínez Quarta","Gonzalo Montiel","Nicolás Otamendi","Facundo González","Juan Portillo","Aníbal Moreno","Mauro Arambarri","Fausto Vera","Thiago Almada","Juan Cruz Meza","Tomás Galván","Lucas Silva","Tobías Andrada","Sebastián Driussi","Ángel Correa","Lucas Beltrán","Rafael Borré","Lautaro Pereyra","Agustín Ruberto"],
+"Boca":["Agustín Marchesín","Álvaro Montero","Leandro Brey","Javier García","Lautaro Di Lollo","Lautaro Blanco","Nicolás Figal","Leandro Lozano","Dylan Gorosito","Marco Pellegrino","Ayrton Costa","Facundo Herrera","Matías Satas","Carlos Palacios","Tomás Belmonte","Tomás Aranda","Williams Alarcón","Leandro Paredes","Rodrigo Battaglia","Milton Delgado","Alan Velasco","Camilo Rey Domenech","Santiago Ascacibar","Malcom Braida","Milton Giménez","Ángel Romero","Enner Valencia","Miguel Merentiel","Leonel Flores","Sebastián Villa","Adam Bareiro"],
+"San Lorenzo":["Mateo Clemente","Facundo Altamirano","José Devecchi","Agustín Pérez","Danilo Arboleda","Teo Rodríguez Pagano","Mathias De Ritis","Guzmán Corujo","Emiliano Amor","Gastón Hernández","Nahuel Arias","Ezequiel Herrera","Alejo Córdoba","Daniel Herrera","Franco Lorenzon","Ramiro Pedroza","Nicolás Blanco","Ignacio Zaballa","Ignacio Perruzzi","Manuel Insaurralde","Juan Cruz Rattalino","Nicolás Tripichio","Martín Río","Nahuel Barrios","Gonzalo Alassia","Mauricio Cardillo","Facundo Gulli","Juan Pablo Álvarez","Gonzalo Abrego","Facundo Farías","Uriel Ojeda","Ezequiel Cerutti","Alexis Cuello","Matías Reali","Agustín Ladstatter","Diego Herazo","Gustavo Del Prete","Branco Salinardi","Rodrigo Auzmendi","Alan Salas"],
+"Lanús":["Franco Petroli","Evaristo Dieguiz","Nahuel Losada","Martín Díaz","Luciano Romero","Nicolás Morgantini","Gonzalo Pérez","Sasha Marcich","José Canale","Carlos Izquierdoz","Tomás Guidara","Ronaldo Dejesús","Felipe Peña Biafore","Franco Watson","Raúl Loaiza","Matías Sepúlveda","Agustín Medina","Ramiro Carrera","Facundo Sánchez","Agustín Cardozo","Marcelino Moreno","Eduardo Salvio","Yoshan Valois","Allan Wlk","Dylan Aquino","Lucas Besozzi"],
+"Rosario Central":["Axel Werner","Jeremías Ledesma","Damián Fernández","Leonardo Sosa","Sebastián Zaracho","Agustín Sández","Juan Cruz Komar","Gastón Ávila","Facundo Mallo","Juan Giménez","Emanuel Coronel","Alexis Soto","Álvaro Güich","Leonardo Ríos","Elías Verón","Ignacio Ovando","Luca Raffin","Franco Ibarra","Marcelo Cabrera","Franco Cervi","Jaminton Campaz","Julián Fernández","Santiago Segovia","Vicente Pizarro","Guillermo Fernández","Giovanni Cantizano","Federico Navarro","Bautista Cantero","Lucas Ramos López","Kevin Gutiérrez","Paolo Giaccone","Alan Rodríguez","Marco Ruben","Ángel Di María","Tomás Badaloni","Enzo Copetti"],
+"Vélez":["Tomás Marchiori","Facundo Sanguinetti","Álvaro Busso","Agustín Cortez","Lisandro Magallán","Emanuel Mammana","Elías Gómez","Joaquín García","Jano Gordon","Thiago Silvero","Leo Cristaldo","Simón Escobar","Alexis Pereyra","Lucas Robertone","Manuel Lanzini","Diego Valdés","Rodrigo Aliendro","Matías Pellegrini","Claudio Baeza","Luca Feler","Ulises Piedrabuena","Thiago Villalba","Ronaldo Martínez","Dilan Godoy","Matías Arias","Alex Verón","Thiago Aguirre","Juan Cruz Policella","Simón Prima","Lautaro Piola"],
+"Argentinos Juniors":["Brayan Cortés","Gonzalo Siri","Francisco Álvarez","Sebastián Prieto","Érik Godoy","Kevin Coronel","Claudio Bravo","Franco Vázquez","Facundo Carrizo","Franco Paredes","Alan Núñez","Nicolás Oroz","Hernán López Muñoz","Emiliano Viveros","César Florentín","Kevin Gutiérrez","Gino Infantino","Santino Gianini","Diego Porcel","Tomás Molina","Gastón Verón","Matías Giménez Rojas","Ryoga Kida"],
+"Independiente":["Rodrigo Rey","Santiago Mele","Juan Centurión","Joaquín Blázquez","Joshua Velardez","Fernando Closter","Santiago Arias","Leonardo Godoy","Facundo Zabala","Gonzalo Bordón","Sebastián Valdéz","Franco Calderón","Luciano Barros Ayala","Jonathan De Irastorza","Juan Arrayago","Juan Fedorco","Iván Marcone","David Martínez","Matheo Benítez Machuca","Facundo Cruz","Mateo Pérez Curci","Joel Medina","Luciano Cabral","Lautaro Millán","Maximiliano Meza","Ezequiel Ávila","Felipe Tempone","Nahuel Junco","Josías Palais","Maximiliano Gutiérrez","Santino Viollaz","Matías Abaldo","Santiago Montiel","Gabriel Ávalos"],
+"Huracán":["Hernán Galíndez","Sebastián Meza","Federico Vera","Marco Pellegrino","Daniel Zabala","Martín Nervo","Leonardo Gil","Víctor Cantillo","Emmanuel Ojeda","Rodrigo Cabral","Juan Bisanz","Leonardo Sequeira","Oscar Cortés","Jordy Caicedo","Bruno Barticciotto","Luciano Giménez","Agustín Urzi","Fabio Pereyra","William Alarcón"],
+"Belgrano":["Juan Espínola","Ignacio Chicco","Franco Jara","Matías Marín","Santiago Longo","Juan Velázquez","Uvita Fernández","Bryan Reyna","Lucas Passerini","Esteban Rolón","Facundo Lencioni","Juan Ignacio Saborido","Aníbal Leguizamón"],
+"Talleres":["Ezequiel Unsain","Santino Barbi","Augusto Schott","Alex Vigo","Santiago Fernández","Román Riquelme","Gabriel Báez","Gonzalo Nuccio","Federico Fattori","Matías Galarza","Franco Cristaldo","Lautaro Ortiz","Giovanni Baroni","Rick Lima Morais","Thiago Baroni","Bruno Trey","Emiliano Chiavassa","Valentín Depietri","Ronaldo Martínez","Valentín Dávila","Diego Valoyes","Matías Catalán","Juan Sforza"],
+"Instituto":["Marcos Ledesma","Manuel Roffo","Jonathan Galván","Leonel Mosevich","Iván Erquiaga","Hernán de la Fuente","Giuliano Cerato","Gustavo Abregú","Franco Moyano","Diego Sosa","Gastón Lodico","Wilder Viera","Lucas Sanseviero","Andrés Meli","Fede Aguerre","Xavier Carreras","Vicente Garello","Lautaro Espeche","Gerardo Larraya","Nicolás Guerra","Matías Tissera","John Córdoba"]
+};
+const roles=["Periodista / cronista","Creador/a de contenido","Fotógrafo/a","Analista de fútbol","Parte del cuerpo técnico","Persona cercana al ambiente"];
+const state={name:"",age:"",city:"",personality:"",role:"",club:"",player:"",score:0,route:[],chapter:1};
+let current=0;
+
+function save(){localStorage.setItem("tuHistoria2026",JSON.stringify(state));document.getElementById("saveLabel").textContent="✓ guardado";}
+function load(){try{Object.assign(state,JSON.parse(localStorage.getItem("tuHistoria2026")||"{}"));}catch(e){}}
+load();
+
+function go(n){
+  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+  const el=document.getElementById("s"+n); if(el) el.classList.add("active");
+  current=n; document.getElementById("bar").style.width=Math.min(100,(n/12)*100)+"%";
+  if(n===2)renderRoles(); if(n===3)renderClubs(); if(n===4)renderPlayers();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function saveInfo(){
+  state.name=document.getElementById("name").value.trim();state.age=document.getElementById("age").value.trim();state.city=document.getElementById("city").value.trim();state.personality=document.getElementById("personality").value;
+  if(!state.name||!state.age||!state.city||!state.personality){document.getElementById("err1").textContent="Completá todos los datos para continuar.";return}
+  save();go(2);
+}
+function renderRoles(){document.getElementById("roles").innerHTML=roles.map((r,i)=>`<button class="choice ${state.role===r?"selected":""}" onclick="pickRole(${i})"><span class="player">${r}</span><small>${["Contás lo que pasa desde adentro.","Convertís cada momento en contenido.","Buscás la imagen que cuenta la historia.","Te fijás en tácticas, rendimiento y detalles.","Vivís el día a día del equipo.","Conocés el ambiente desde un lugar cercano."][i]}</small></button>`).join("")}
+function pickRole(i){state.role=roles[i];renderRoles()}
+function saveRole(){if(!state.role)return alert("Elegí un rol.");save();go(3)}
+function renderClubs(){document.getElementById("clubs").innerHTML=Object.keys(clubs).map(c=>`<button class="choice ${state.club===c?"selected":""}" onclick="pickClub('${c}')"><span class="club">${c}</span><small>${clubs[c].length} personajes disponibles</small></button>`).join("")}
+function pickClub(c){state.club=c;state.player="";renderClubs()}
+function saveClub(){if(!state.club)return alert("Elegí un club.");save();go(4)}
+function renderPlayers(){document.getElementById("clubIntro").innerHTML=`Club elegido: <span class="pill">${state.club}</span>. Elegí un futbolista del plantel disponible.`;document.getElementById("players").innerHTML=clubs[state.club].map(p=>`<button class="choice ${state.player===p?"selected":""}" onclick="pickPlayer('${p.replace(/'/g,"\\'")}')"><span class="player">${p}</span><small>${state.club}</small></button>`).join("")}
+function pickPlayer(p){state.player=p;renderPlayers()}
+function savePlayer(){if(!state.player)return alert("Elegí un futbolista.");save();buildChapter(1);go(5)}
+
+function header(ch,title){return `<div class="card"><span class="badge">CAPÍTULO ${ch} · ${state.club}</span><h2>${title}</h2><div class="stats"><span class="stat">👤 ${state.name}</span><span class="stat">⚽ ${state.player}</span><span class="stat">🎯 ${state.role}</span></div></div>`}
+function chapterText(ch){return `<p class="story">Es un día importante para <b>${state.name}</b>. Tu rol como <b>${state.role}</b> te lleva a cruzarte con <b>${state.player}</b> en el entorno de <b>${state.club}</b>. Lo que hagas ahora puede cambiar las situaciones que aparezcan después.</p>`}
+const situations={
+1:[
+["Llegás temprano","Aprovechás que todavía hay poca gente y observás cómo se prepara todo.","curious"],
+["Vas directo a trabajar","Te concentrás en tu tarea y dejás las distracciones para después.","focused"],
+["Te quedás mirando el ambiente","Preferís entender qué está pasando antes de tomar una decisión.","observant"]
+],
+2:[
+["Hacés una pregunta inesperada","Una pregunta bien pensada abre una conversación sobre el fútbol y el vestuario.","social"],
+["Buscás información","Reunís datos y tratás de entender el contexto antes de actuar.","smart"],
+["Seguís tu intuición","Tomás una decisión rápida y aceptás las consecuencias.","bold"]
+],
+3:[
+["Aceptás el desafío","Una oportunidad aparece y decidís probarte a vos mismo/a.","bold"],
+["Pedís unos minutos","Preferís pensar la propuesta antes de responder.","careful"],
+["Proponés otra idea","En lugar de seguir el plan original, sugerís una alternativa.","creative"]
+],
+4:[
+["Te quedás hasta el final","Aunque el día fue largo, decidís terminar lo que empezaste.","persistent"],
+["Priorizás tu objetivo","Elegís una sola cosa y concentrás toda tu energía en ella.","focused"],
+["Ayudás a otra persona","Tu propia tarea puede esperar un momento mientras das una mano.","kind"]
+],
+5:[
+["Contás lo que viste","Armás una historia basada en lo que realmente pasó.","honest"],
+["Guardás el material","Decidís esperar antes de publicar cualquier cosa.","careful"],
+["Buscás una mirada distinta","Intentás mostrar el momento desde un ángulo que nadie esperaba.","creative"]
+],
+6:[
+["Tomás una decisión difícil","Dos caminos se abren y tenés que elegir uno.","bold"],
+["Consultás a alguien","Antes de avanzar, buscás una segunda opinión.","social"],
+["Confiás en tu preparación","Recordás todo lo que aprendiste y seguís adelante.","confident"]
+],
+7:[
+["Apostás por tu proyecto","El último desafío pone a prueba todo lo que hiciste hasta ahora.","ambitious"],
+["Elegís cuidar el equipo","Tu decisión prioriza el trabajo conjunto.","team"],
+["Seguís tu propio camino","Decidís cerrar esta etapa siendo fiel a tu forma de hacer las cosas.","independent"]
+]
+};
+function buildChapter(ch){
+ const sec=document.getElementById("s"+(ch+4));let opts=situations[ch];
+ let title=["El primer día","Una oportunidad","El desafío","Una jornada intensa","Lo que queda registrado","La decisión","El cierre"][ch-1];
+ sec.innerHTML=header(ch,title)+chapterText(ch)+`<div class="scene"><b>Situación</b><br>Elegí qué hacés. No hay una única forma de continuar la historia.</div><div class="choiceList">${opts.map((o,i)=>`<button class="choice" onclick="choose(${ch},${i},'${o[2]}')"><span class="player">${o[0]}</span><small>${o[1]}</small></button>`).join("")}</div>`;
+}
+function choose(ch,i,route){
+ state.route[ch-1]=route;
+ state.score += i===0?2:i===1?1:3;
+ save();
+ if(ch<7){buildChapter(ch+1);go(ch+5)}
+ else {buildFinal();go(12)}
+}
+function buildFinal(){
+ let tone=state.score>=17?"decidido/a":state.score>=12?"equilibrado/a":"reflexivo/a";
+ document.getElementById("s12").innerHTML=`
+ <div class="card"><span class="badge">FINAL</span><h2>Fin de esta etapa</h2>
+ <p class="story"><b>${state.name}</b>, con ${state.age} años, desde ${state.city}, llegaste al cierre de tu primera etapa en el mundo de <b>${state.club}</b>.</p>
+ <p class="story">Tu recorrido junto a <b>${state.player}</b> estuvo marcado por decisiones que mostraron una personalidad <b>${tone}</b>. Tu rol como <b>${state.role}</b> terminó dándote una perspectiva propia del fútbol profesional.</p>
+ <div class="stats"><span class="stat">Puntaje de recorrido: ${state.score}</span><span class="stat">Decisiones: ${state.route.length}/7</span></div></div>
+ <div class="card"><h3>¿Qué sigue?</h3><p class="story">Esta historia puede continuar con una nueva temporada, otro club, nuevos personajes y consecuencias de tus decisiones anteriores.</p></div>
+ <div class="actions"><button class="btn secondary" onclick="resetGame()">NUEVA HISTORIA</button></div>`;
+}
+function resetGame(){localStorage.removeItem("tuHistoria2026");location.reload()}
+</script>
+</body>
+</html>
